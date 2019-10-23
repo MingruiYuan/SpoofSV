@@ -1,0 +1,54 @@
+{
+	"DATA_ROOT_DIR": "/scratch/myuan7/corpus/VCTK-Corpus/",
+	"SPK_EMB_DIR": "/scratch/myuan7/corpus/VCTK-Corpus/spk_emb/",
+	"SRC_ROOT_DIR": "/scratch/myuan7/program/ACTTS/",
+	"ANTISPOOF_DIR": "/scratch/myuan7/corpus/ASVspoof2019/LA/",
+
+	"SPK_EMB_DIM": 200,
+	"HIDDEN_DIM": 256,
+	"TEXT_EMB_DIM": 128,
+	"SSRN_DIM": 256,
+	"DISC_DIM": 128,
+	"VOCABULARY": "PE abcdefghijklmnopqrstuvwxyz-,.?'\"",
+	"MAX_TEXT_LEN": 186,
+	"MAX_FRAME_NUM": 325,
+
+	"SAMPLING_RATE": 22050,	
+	"PREEMPH": 0.97,
+	"STFT":{
+		"FFT_LENGTH": 1024,
+		"HOP_LENGTH": 256
+	},
+	"COARSE_MELSPEC":{
+		"REDUCTION": 4,
+		"FREQ_BINS": 80
+	},
+	"NORM_POWER": {		
+		"ANALYSIS": 0.6,
+		"RECONSTRUCTION": 1.3
+	},
+	"LOG_FEATURE": false,
+	"MAX_DB": 100,
+	"REF_DB": 20,
+
+	"MULTI_GPU": false,
+	"PLOT_CURVE": true,
+
+	"APPLY_DROPOUT": false,	
+	"BATCH_SIZE": 16,
+	"MAX_EPOCHS": 500,
+	"VAL_EVERY_ITER": 1000,
+	"ADAM": {
+		"ALPHA": 2e-4,
+		"BETA_1": 0.5,
+		"BETA_2": 0.9,
+		"EPSILON": 1e-6
+	},
+
+	"RATIO": 5,
+	"LAMBDA": 10,
+
+	"INFERENCE_TEXT2MEL_MODEL": "./checkpoints/conditional/adversarial/19-08-17_13-05-42/text2mel_iteration_538001.tar.pth",
+	"INFERENCE_SSRN_MODEL": "./checkpoints/universal/adversarial/19-08-16_15-21-21/ssrn_iteration_308001.tar.pth",
+	"TTS_TEXTS": "./havard.txt"
+}

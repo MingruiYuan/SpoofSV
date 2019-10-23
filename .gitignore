@@ -1,0 +1,6 @@
+test/
+kaldi-score/
+checkpoints/*/*/*
+spec/*/
+*/__pycache__
+
