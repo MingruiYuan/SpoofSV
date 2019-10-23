@@ -8,7 +8,7 @@ import json
 if __name__ == '__main__':
 	ps = argparse.ArgumentParser(description='Adversarial Conditional Text-to-speech')
 	ps.add_argument('step', choices=['train_text2mel', 'train_ssrn', 'synthesize'], metavar='s')
-	ps.add_argument('-P','--pattern', choices=['universal', 'conditional', 'ubm-finetune'], default='conditional', required=True, metavar='m')
+	ps.add_argument('-P','--pattern', choices=['universal', 'conditional', 'ubm-finetune'], default='conditional', metavar='m')
 	ps.add_argument('-R','--resume', type=str, default=None, metavar='checkpoint')
 	ps.add_argument('-C', '--configuration', type=str, default=None)
 	ps.add_argument('--adversarial', action='store_true')

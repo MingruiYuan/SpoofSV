@@ -1,7 +1,7 @@
 {
 	"DATA_ROOT_DIR": "/scratch/myuan7/corpus/VCTK-Corpus/",
 	"SPK_EMB_DIR": "/scratch/myuan7/corpus/VCTK-Corpus/spk_emb/",
-	"SRC_ROOT_DIR": "/scratch/myuan7/program/ACTTS/",
+	"SRC_ROOT_DIR": "/scratch/myuan7/SpoofSV/",
 	"ANTISPOOF_DIR": "/scratch/myuan7/corpus/ASVspoof2019/LA/",
 
 	"SPK_EMB_DIM": 200,
