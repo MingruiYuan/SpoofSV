@@ -1,5 +1,7 @@
 # Spoofing Speaker Verification
 
+This repository is in progress. It reproduce the paper [url].
+
 ## Section I Multi-speaker Text-to-speech
 
 ### Clone this Repository
@@ -24,7 +26,7 @@ wget -bc http://datashare.is.ed.ac.uk/download/DS_10283_2651.zip
 unzip DS_10283_2651.zip && unzip VCTK-Corpus.zip
 ```
 
-Make sure to **overwrite *DATA_ROOT_DIR* in config.json** with your own directory name.
+Make sure to **overwrite DATA_ROOT_DIR in config.json** with your own directory name. **DATA_ROOT_DIR** is the directory where you save the VCTK-Corpus.
 
 ### Dataset Preprocessing
 
@@ -36,7 +38,9 @@ This script eliminates invalid data and downsample audio files from 48kHz to 22.
 
 ### Training
 
-If you would like to train the model from the beginning, please use the following script. If you would like to use our pre-trained model, please skip this part.
+If you would like to train the model from the beginning, please use the following commands. If you would like to use our pre-trained model, please skip this training part.
+
+Firstly please modify **config.json**. Make sure to **overwrite SPK_EMB_DIR and SRC_ROOT_DIR**. **SPK_EMB_DIR** is the directory where you save speaker embeddings (provided at ./spk_emb). **SRC_ROOT_DIR** is the directory of this repository. 
 
 **Train Text2Mel**
 
@@ -52,3 +56,4 @@ ctime=$(date "+%y-%m-%d_%H-%M-%S")
 python -u main.py train_ssrn -C config.json -T ${ctime} --adversarial --save_spectrogram
 ```
 
+Please note that we use the time when the training starts to identify different training. The time (${ctime}) is used to save checkpoints and generated speech which are specified later.
