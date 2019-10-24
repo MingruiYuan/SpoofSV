@@ -12,11 +12,10 @@ with open(args.config_path, 'r') as f:
     config = json.load(f)
 
 root_dir = config["DATA_ROOT_DIR"] # Your data root directory.
-print('Your data root directory is {}'.format(config["DATA_ROOT_DIR"]))
-os.system('export ROOT_DIR='+root_dir)
-os.system('rm -rf ${ROOT_DIR}wav48/p315/')
+print('Your data root directory is {}'.format(root_dir))
+os.system('rm -rf {}wav48/p315/'.format(root_dir))
 print('Remove speaker p315')
-os.system('rm -f ${ROOT_DIR}wav48/p376/p376_295.raw')
+os.system('rm -f {}wav48/p376/p376_295.raw'.format(root_dir))
 wav = root_dir + 'wav48/'
 txt = root_dir + 'txt/'
 new_wav_dir = root_dir + 'wav22/'
@@ -58,6 +57,6 @@ file3.close()
 file4.close()
 file5.close()
 file6.close()
-os.system('mkdir -p ${ROOT_DIR}data_path/ordinary')
-os.system('mv wav.* ${ROOT_DIR}data_path/ordinary/')
-os.system('mv txt.* ${ROOT_DIR}data_path/ordinary/')
+os.system('mkdir -p {}data_path/ordinary'.format(root_dir))
+os.system('mv wav.* {}data_path/ordinary/'.format(root_dir))
+os.system('mv txt.* {}data_path/ordinary/'.format(root_dir))
