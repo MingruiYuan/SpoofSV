@@ -12,8 +12,10 @@ with open(args.config_path, 'r') as f:
     config = json.load(f)
 
 root_dir = config["DATA_ROOT_DIR"] # Your data root directory.
+print('Your data root directory is {}'.format(config["DATA_ROOT_DIR"]))
 os.system('export ROOT_DIR='+root_dir)
 os.system('rm -rf ${ROOT_DIR}wav48/p315/')
+print('Remove speaker p315')
 os.system('rm -f ${ROOT_DIR}wav48/p376/p376_295.raw')
 wav = root_dir + 'wav48/'
 txt = root_dir + 'txt/'
@@ -30,26 +32,26 @@ test_loc = [3/7,4/7,6/7]
 for k in range(len(os.listdir(wav))):
     wv = os.listdir(wav+os.listdir(wav)[k])
     if not os.path.exists(new_wav_dir+os.listdir(wav)[k]):
-    	os.system('mkdir -p '+new_wav_dir+os.listdir(wav)[k])
+        os.system('mkdir -p '+new_wav_dir+os.listdir(wav)[k])
     wv.sort(key = lambda x:x[:-4])
     tx = os.listdir(txt+os.listdir(txt)[k])
     tx.sort(key = lambda x:x[:-4])
     dev_loc_1 = [int(len(wv)*dev_loc[k1]) for k1 in range(len(dev_loc))]
     test_loc_1 = [int(len(tx)*test_loc[k1]) for k1 in range(len(test_loc))]
     for p in range(len(wv)):
-    	print('Process ', wv[p])
-    	y, sr = librosa.load(path=wav+os.listdir(wav)[k]+'/'+wv[p],mono=True)
+        print('Process ', wv[p])
+        y, sr = librosa.load(path=wav+os.listdir(wav)[k]+'/'+wv[p],mono=True)
         assert sr==22050
-    	librosa.output.write_wav(path=new_wav_dir+os.listdir(wav)[k]+'/'+wv[p],y=y,sr=sr)
-    	if p in dev_loc_1:
-    		file3.write(new_wav_dir+os.listdir(wav)[k]+'/'+wv[p]+'\n')
-    		file4.write(txt+os.listdir(txt)[k]+'/'+tx[p]+'\n')
-    	elif p in test_loc_1:
-    		file5.write(new_wav_dir+os.listdir(wav)[k]+'/'+wv[p]+'\n')
-    		file6.write(txt+os.listdir(txt)[k]+'/'+tx[p]+'\n')
-    	else:
-	        file1.write(new_wav_dir+os.listdir(wav)[k]+'/'+wv[p]+'\n')
-	        file2.write(txt+os.listdir(txt)[k]+'/'+tx[p]+'\n')
+        librosa.output.write_wav(path=new_wav_dir+os.listdir(wav)[k]+'/'+wv[p],y=y,sr=sr)
+        if p in dev_loc_1:
+            file3.write(new_wav_dir+os.listdir(wav)[k]+'/'+wv[p]+'\n')
+            file4.write(txt+os.listdir(txt)[k]+'/'+tx[p]+'\n')
+        elif p in test_loc_1:
+            file5.write(new_wav_dir+os.listdir(wav)[k]+'/'+wv[p]+'\n')
+            file6.write(txt+os.listdir(txt)[k]+'/'+tx[p]+'\n')
+        else:
+            file1.write(new_wav_dir+os.listdir(wav)[k]+'/'+wv[p]+'\n')
+            file2.write(txt+os.listdir(txt)[k]+'/'+tx[p]+'\n')
 file1.close()
 file2.close()
 file3.close()

@@ -13,6 +13,7 @@ git clone https://github.com/MingruiYuan/SpoofSV.git && cd SpoofSV
 Please create a new environment and install necessary packages.
 
 ```shell
+conda create -n [env name] python=3.6
 pip install -r requirements.txt
 ```
 
@@ -20,16 +21,34 @@ pip install -r requirements.txt
 
 ```shell
 wget -bc http://datashare.is.ed.ac.uk/download/DS_10283_2651.zip
-unzip -d [your DATA_ROOT_DIR] DS_10283_2651.zip
+unzip DS_10283_2651.zip && unzip VCTK-Corpus.zip
 ```
 
-Make sure to overwrite **DATA_ROOT_DIR** in **config.json** with your own directory name.
+Make sure to **overwrite *DATA_ROOT_DIR* in config.json** with your own directory name.
 
 #### Dataset Preprocessing
 
 ```shell
-python metagen.py --config_path ./config.json
+python -u metagen.py --config_path ./config.json
 ```
 
-This script will
+This script eliminates invalid data and downsample audio files from 48kHz to 22.05kHz. It also generates meta-data of the dataset.
+
+#### Training
+
+If you would like to train the model from the beginning, please use the following script. If you would like to use our pre-trained model, please skip this part.
+
+**Train Text2Mel**
+
+```shell
+ctime=$(date "+%y-%m-%d_%H-%M-%S")
+python -u main.py train_text2mel -C config.json --adversarial --save_spectrogram -T ${ctime}
+```
+
+**Train SSRN**
+
+```shell
+ctime=$(date "+%y-%m-%d_%H-%M-%S")
+python -u main.py train_ssrn -C config.json --adversarial --save_spectrogram -T ${ctime}
+```
 
