@@ -76,7 +76,17 @@ ctime=$(date "+%y-%m-%d_%H-%M-%S")
 python -u main.py synthesize -C config.json -T ${ctime} --adversarial --save_spectrogram
 ```
 
+## Section II Spoofing Speaker Verification Systems and Anti-spoofing Systems
+
 ### Generating Data from Harvard Sentences for Spoofing Speaker Verification Systems
+
+**Download ASVspoof 2019 Dataset**
+
+
+
+Please modify **ANTISPOOF_DIR** in config.json.
+
+Please also modify **INFERENCE_TEXT2MEL_MODEL** and **INFERENCE_SSRN_MODEL** in config.json. Then the following command synthesizes from Harvard Sentences. The output audio files are saved at **./test/${ctime}**.
 
 ```shell
 ctime=$(date "+%y-%m-%d_%H-%M-%S")
