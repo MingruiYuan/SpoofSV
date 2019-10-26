@@ -1,0 +1,41 @@
+training: !!bool "false"
+device: "cuda"
+unprocessed_data: '/scratch/myuan7/program/ACTTS/test/19-09-12_09-11-19/ge2e_data/*/*.wav'
+save_simmat_dir: './simmat_19-09-12_09-11-19'
+---
+data:
+    train_path: './train_tisv_19-09-12_09-11-19'
+    train_path_unprocessed: './TIMIT/TRAIN/*/*/*.wav'
+    test_path: './test_tisv_19-09-12_09-11-19'
+    test_path_unprocessed: './TIMIT/TEST/*/*/*.wav'
+    data_preprocessed: !!bool "true" 
+    sr: 16000
+    nfft: 512 #For mel spectrogram preprocess
+    window: 0.025 #(s)
+    hop: 0.01 #(s)
+    nmels: 40 #Number of mel energies
+    tisv_frame: 120 #Max number of time steps in input after preprocess
+---   
+model:
+    hidden: 768 #Number of LSTM hidden layer units
+    num_layer: 3 #Number of LSTM layers
+    proj: 256 #Embedding size
+    model_path: './speech_id_checkpoint_42/final_epoch_950_batch_id_7.model' #Model path for testing, inference, or resuming training
+---
+train:
+    N : 6 #Number of speakers in batch
+    M : 50 #Number of utterances per speaker
+    num_workers: 0 #number of workers for dataloader
+    lr: 0.01 
+    epochs: 950 #Max training speaker epoch 
+    log_interval: 5 #Epochs before printing progress
+    log_file: './speech_id_checkpoint_60/Stats'
+    checkpoint_interval: 120 #Save model after x speaker epochs
+    checkpoint_dir: './speech_id_checkpoint_60'
+    restore: !!bool "false" #Resume training from previous model path
+---
+test:
+    N : 66 #Number of speakers in batch
+    M : 86 #Number of utterances per speaker
+    num_workers: 8 #number of workers for data laoder
+    epochs: 5 #testing speaker epochs
