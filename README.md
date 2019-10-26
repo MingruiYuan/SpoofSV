@@ -67,7 +67,7 @@ ctime=$(date "+%y-%m-%d_%H-%M-%S")
 python -u main.py train_ssrn -C config.json -T ${ctime} -R [/path/to/checkpoint] --adversarial --save_spectrogram 
 ```
 
-### 1.5.4.Synthesizing from Test Set
+### 1.6.Synthesizing from Test Set
 
 Please firstly modify **INFERENCE_TEXT2MEL_MODEL** and **INFERENCE_SSRN_MODEL** in config.json. These two models will be used to generate speech. Then the following command synthesizes speech from test set. The output audio files are saved at **./samples/${ctime}/**.
 
