@@ -35,7 +35,7 @@ train:
     restore: !!bool "false" #Resume training from previous model path
 ---
 test:
-    N : 66 #Number of speakers in batch
+    N : 20 #Number of speakers in batch
     M : 86 #Number of utterances per speaker
     num_workers: 8 #number of workers for data laoder
-    epochs: 5 #testing speaker epochs
+    epochs: 10 #testing speaker epochs

@@ -39,6 +39,9 @@ def plot_attention(att, E, B, N, fig_dir):
 
 def train(model_path):
     device = torch.device(hp.device)
+
+    if not os.path.exists(hp.train.checkpoint_dir):
+        os.system('mkdir -p '+hp.train.checkpoint_dir)
     
     if hp.data.data_preprocessed:
         train_dataset = SpeakerDatasetTIMITPreprocessed(shuffle=True)
