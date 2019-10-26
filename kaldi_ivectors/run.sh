@@ -12,7 +12,7 @@
 # See README.txt for more info on data required.
 # Results (EER) are inline in comments below
 
-src_root=/scratch/myuan7/program/ACTTS
+src_root=/scratch/myuan7/program/SpoofSV
 ctime=19-09-12_09-08-12
 
 data=${src_root}/test

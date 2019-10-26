@@ -6,4 +6,10 @@ Please install kaldi according to [http://kaldi-asr.org/doc/](http://kaldi-asr.o
 
 ### 2.Modify run.sh
 
-Please modify **src_root** and **ctime** in run.sh. **src_root** is the root directory of this SpoofSV repository. **ctime** is the directory where you save the test speech.
+Please modify **src_root** and **ctime** in *run.sh*. **src_root** is the root directory of this SpoofSV repository. **ctime** is determined by the directory where you save the test speech.
+
+```shell
+src_root=/scratch/myuan7/program/SpoofSV
+ctime=19-09-12_09-08-12
+```
+

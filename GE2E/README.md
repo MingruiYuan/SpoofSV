@@ -1,6 +1,6 @@
 # Spoofing GE2E
 
-This part comes from [https://github.com/HarryVolek/PyTorch_Speaker_Verification](https://github.com/HarryVolek/PyTorch_Speaker_Verification).
+This part refers to [https://github.com/HarryVolek/PyTorch_Speaker_Verification](https://github.com/HarryVolek/PyTorch_Speaker_Verification).
 
 Please first modify **./config/config.yaml**. Overwrite **unprocessed_data** with your own directory. It should be the directory where you save the generated data for GE2E.
 
@@ -41,15 +41,15 @@ As we have preprocessed data, please use preprocessed data. Also, please do not 
 data:
     data_preprocessed: !!bool "true" 
 train:
-	restore: !!bool "false"
+    restore: !!bool "false"
 ```
 
 And remember to specify a directory to save checkpoints and log file.
 
 ```yaml
 train:
-	log_file: './speech_id_checkpoint_88/Stats'
-	checkpoint_dir: './speech_id_checkpoint_88'
+    log_file: './speech_id_checkpoint_88/Stats'
+    checkpoint_dir: './speech_id_checkpoint_88'
 ```
 
 Run the following command to start training:
@@ -73,7 +73,7 @@ As we have preprocessed data, please use preprocessed data. And you need to spec
 data:
     data_preprocessed: !!bool "true" 
 model: 
-	model_path: './speech_id_checkpoint_88/final_epoch_950_batch_id_10.model'   
+    model_path: './speech_id_checkpoint_88/final_epoch_950_batch_id_10.model'   
 ```
 
 And remember to specify a place to save simmats (similarity matrices) which are used to compute EER threshold and spoof rate.
