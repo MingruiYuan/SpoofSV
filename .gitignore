@@ -3,4 +3,5 @@ kaldi-score/
 checkpoints/*/*/*
 spec/*/
 */__pycache__
+pretrained/
 
