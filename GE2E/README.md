@@ -26,7 +26,7 @@ python -u data_preprocess.py --train_spk_num [88/60/42]
 
 ### 2.Training
 
-If you would like to use the pretrained models, please skip this part.
+If you would like to use the pretrained models [(download)](https://drive.google.com/open?id=1DOjkQ63Pq0x399Jkmy-KIDUcRUQHJiJK), please skip this part.
 
 Before training, firstly set the config.yaml to training mode and choose proper devices.
 

@@ -42,7 +42,7 @@ This script eliminates invalid data and downsample audio files from 48kHz to 22.
 
 ### 1.5.Training
 
-If you would like to train the model from the beginning, please use the following commands. If you would like to use our pre-trained model ([download](https://drive.google.com/drive/folders/14Yyf5XznRartjxoGZS-e8jP0BR6xZDlP)), please skip this training part. But please note that the pretrained models may not support further training because of the different version of the code. For inference, the pretrained models can work well.
+If you would like to train the model from the beginning, please use the following commands. If you would like to use our pre-trained model ([download](https://drive.google.com/open?id=14Yyf5XznRartjxoGZS-e8jP0BR6xZDlP)), please skip this training part. But please note that the pretrained models may not support further training because of the different version of the code. For inference, the pretrained models can work well.
 
 Firstly please modify **config.json**. Make sure to **overwrite SPK_EMB_DIR** and  **SRC_ROOT_DIR**. **SPK_EMB_DIR** is the directory where you save speaker embeddings. **SRC_ROOT_DIR** is the directory of this repository. 
 
