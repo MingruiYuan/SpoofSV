@@ -12,10 +12,11 @@
 # See README.txt for more info on data required.
 # Results (EER) are inline in comments below
 
-data=/scratch/myuan7/program/ACTTS/test
-data_url=www.openslr.org/resources/33
-
+src_root=/scratch/myuan7/program/ACTTS
 ctime=19-09-12_09-08-12
+
+data=${src_root}/test
+data_url=www.openslr.org/resources/33
 
 . ./cmd.sh
 . ./path.sh
@@ -53,28 +54,28 @@ for x in test; do
   utils/fix_data_dir.sh data/$x
 done
 
-##train diag ubm
-#sid/train_diag_ubm.sh --nj 2 --cmd "$train_cmd" --num-threads 8 \
-#  data/train 1024 exp/diag_ubm_1024
-#
-##train full ubm
-#sid/train_full_ubm.sh --nj 2 --cmd "$train_cmd" data/train \
-#  exp/diag_ubm_1024 exp/full_ubm_1024
-#
-##train ivector
-#sid/train_ivector_extractor.sh --cmd "$train_cmd --mem 10G" \
-#  --num-iters 5 exp/full_ubm_1024/final.ubm data/train \
-#  exp/extractor_1024
-#
-##extract ivector
-#sid/extract_ivectors.sh --cmd "$train_cmd" --nj 2 \
-#  exp/extractor_1024 data/train exp/ivector_train_1024
-#
-##train plda
-#$train_cmd exp/ivector_train_1024/log/plda.log \
-#  ivector-compute-plda ark:data/train/spk2utt \
-#  'ark:ivector-normalize-length scp:exp/ivector_train_1024/ivector.scp  ark:- |' \
-#  exp/ivector_train_1024/plda
+#train diag ubm
+sid/train_diag_ubm.sh --nj 2 --cmd "$train_cmd" --num-threads 8 \
+ data/train 1024 exp/diag_ubm_1024
+
+#train full ubm
+sid/train_full_ubm.sh --nj 2 --cmd "$train_cmd" data/train \
+ exp/diag_ubm_1024 exp/full_ubm_1024
+
+#train ivector
+sid/train_ivector_extractor.sh --cmd "$train_cmd --mem 10G" \
+ --num-iters 5 exp/full_ubm_1024/final.ubm data/train \
+ exp/extractor_1024
+
+#extract ivector
+sid/extract_ivectors.sh --cmd "$train_cmd" --nj 2 \
+ exp/extractor_1024 data/train exp/ivector_train_1024
+
+#train plda
+$train_cmd exp/ivector_train_1024/log/plda.log \
+ ivector-compute-plda ark:data/train/spk2utt \
+ 'ark:ivector-normalize-length scp:exp/ivector_train_1024/ivector.scp  ark:- |' \
+ exp/ivector_train_1024/plda
 
 #split the test to enroll and eval
 mkdir -p data/test/enroll data/test/eval
