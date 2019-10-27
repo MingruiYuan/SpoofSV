@@ -12,11 +12,13 @@
 # See README.txt for more info on data required.
 # Results (EER) are inline in comments below
 
-src_root=/scratch/myuan7/program/SpoofSV
+firstrun=$1
+
+src_root=/scratch/myuan7/SpoofSV
 ctime=19-09-12_09-08-12
 
 data=${src_root}/test
-data_url=www.openslr.org/resources/33
+# data_url=www.openslr.org/resources/33
 
 . ./cmd.sh
 . ./path.sh
@@ -27,19 +29,44 @@ set -e # exit on error
 #local/download_and_untar.sh $data $data_url resource_aishell
 
 #Convert test set to pcm format
-for dir in test;
-do
-	for spk in $( ls ${data}/${ctime}/ivector_data/wav/${dir} )
+if [$firstrun -gt 0]
+then
+	echo "Not the first time to run this script."
+else
+	echo "The first time to run this script."
+	mkdir ivector_scores
+fi  
+
+if [$firstrun -gt 0]
+then
+	for dir in test
 	do
-		for utt in $( ls ${data}/${ctime}/ivector_data/wav/${dir}/${spk} )
+		for spk in $( ls ${data}/${ctime}/ivector_data/wav/${dir} )
 		do
-			file=${data}/${ctime}/ivector_data/wav/${dir}/${spk}/${utt}
-			mv $file ${file%.*}.WAV
-			sox ${file%.*}.WAV -t wav -r 16000 -b 16 $file
-			rm -f ${file%.*}.WAV
+			for utt in $( ls ${data}/${ctime}/ivector_data/wav/${dir}/${spk} )
+			do
+				file=${data}/${ctime}/ivector_data/wav/${dir}/${spk}/${utt}
+				mv $file ${file%.*}.WAV
+				sox ${file%.*}.WAV -t wav -r 16000 -b 16 $file
+				rm -f ${file%.*}.WAV
+			done
 		done
 	done
-done
+else
+	for dir in train test
+	do
+		for spk in $( ls ${data}/${ctime}/ivector_data/wav/${dir} )
+		do
+			for utt in $( ls ${data}/${ctime}/ivector_data/wav/${dir}/${spk} )
+			do
+				file=${data}/${ctime}/ivector_data/wav/${dir}/${spk}/${utt}
+				mv $file ${file%.*}.WAV
+				sox ${file%.*}.WAV -t wav -r 16000 -b 16 $file
+				rm -f ${file%.*}.WAV
+			done
+		done
+	done
+fi
 
 # Data Preparation
 local/aishell_data_prep.sh $data/${ctime}/ivector_data/wav $data/${ctime}/ivector_data/transcript
@@ -48,34 +75,47 @@ local/aishell_data_prep.sh $data/${ctime}/ivector_data/wav $data/${ctime}/ivecto
 # mfccdir should be some place with a largish disk where you
 # want to store MFCC features.
 mfccdir=mfcc
-for x in test; do
-  steps/make_mfcc.sh --cmd "$train_cmd" --nj 2 data/$x exp/make_mfcc/$x $mfccdir
-  sid/compute_vad_decision.sh --nj 2 --cmd "$train_cmd" data/$x exp/make_mfcc/$x $mfccdir
-  utils/fix_data_dir.sh data/$x
-done
 
-#train diag ubm
-sid/train_diag_ubm.sh --nj 2 --cmd "$train_cmd" --num-threads 8 \
- data/train 1024 exp/diag_ubm_1024
+if [$firstrun -gt 0]
+then
+	for x in test; do
+	  steps/make_mfcc.sh --cmd "$train_cmd" --nj 2 data/$x exp/make_mfcc/$x $mfccdir
+	  sid/compute_vad_decision.sh --nj 2 --cmd "$train_cmd" data/$x exp/make_mfcc/$x $mfccdir
+	  utils/fix_data_dir.sh data/$x
+	done
+else
+	for x in train test; do
+	  steps/make_mfcc.sh --cmd "$train_cmd" --nj 2 data/$x exp/make_mfcc/$x $mfccdir
+	  sid/compute_vad_decision.sh --nj 2 --cmd "$train_cmd" data/$x exp/make_mfcc/$x $mfccdir
+	  utils/fix_data_dir.sh data/$x
+	done
+fi
 
-#train full ubm
-sid/train_full_ubm.sh --nj 2 --cmd "$train_cmd" data/train \
- exp/diag_ubm_1024 exp/full_ubm_1024
+if [$firstrun -eq 0]
+then
+	#train diag ubm
+	sid/train_diag_ubm.sh --nj 2 --cmd "$train_cmd" --num-threads 8 \
+	 data/train 1024 exp/diag_ubm_1024
 
-#train ivector
-sid/train_ivector_extractor.sh --cmd "$train_cmd --mem 10G" \
- --num-iters 5 exp/full_ubm_1024/final.ubm data/train \
- exp/extractor_1024
+	#train full ubm
+	sid/train_full_ubm.sh --nj 2 --cmd "$train_cmd" data/train \
+	 exp/diag_ubm_1024 exp/full_ubm_1024
 
-#extract ivector
-sid/extract_ivectors.sh --cmd "$train_cmd" --nj 2 \
- exp/extractor_1024 data/train exp/ivector_train_1024
+	#train ivector
+	sid/train_ivector_extractor.sh --cmd "$train_cmd --mem 10G" \
+	 --num-iters 5 exp/full_ubm_1024/final.ubm data/train \
+	 exp/extractor_1024
 
-#train plda
-$train_cmd exp/ivector_train_1024/log/plda.log \
- ivector-compute-plda ark:data/train/spk2utt \
- 'ark:ivector-normalize-length scp:exp/ivector_train_1024/ivector.scp  ark:- |' \
- exp/ivector_train_1024/plda
+	#extract ivector
+	sid/extract_ivectors.sh --cmd "$train_cmd" --nj 2 \
+	 exp/extractor_1024 data/train exp/ivector_train_1024
+
+	#train plda
+	$train_cmd exp/ivector_train_1024/log/plda.log \
+	 ivector-compute-plda ark:data/train/spk2utt \
+	 'ark:ivector-normalize-length scp:exp/ivector_train_1024/ivector.scp  ark:- |' \
+	 exp/ivector_train_1024/plda
+fi
 
 #split the test to enroll and eval
 mkdir -p data/test/enroll data/test/eval
@@ -104,9 +144,66 @@ $train_cmd exp/ivector_eval_1024/log/plda_score.log \
 
 #compute eer
 awk '{print $3}' exp/trials_out | paste - $trials | awk '{print $1, $4}' | compute-eer -
+mv exp/trials_out ivector_scores/${ctime}.score
 
-# Result
-# Scoring against data/test/aishell_speaker_ver.lst
-# Equal error rate is 0.140528%, at threshold -12.018
+mv ${data}/${ctime}/ivector_data/wav/test ${data}/${ctime}/ivector_data/test_mix
+mv ${data}/${ctime}/ivector_data/test_nospoof ${data}/${ctime}/ivector_data/wav/test
+mv $data/${ctime}/ivector_data/transcript/VCTK-transcript.txt $data/${ctime}/ivector_data/trans_mix.txt
+mv $data/${ctime}/ivector_data/VCTK-transcript_nospoof.txt $data/${ctime}/ivector_data/transcript/VCTK-transcript.txt
+
+rm -rf data mfcc
+
+for dir in test
+do
+	for spk in $( ls ${data}/${ctime}/ivector_data/wav/${dir} )
+	do
+		for utt in $( ls ${data}/${ctime}/ivector_data/wav/${dir}/${spk} )
+		do
+			file=${data}/${ctime}/ivector_data/wav/${dir}/${spk}/${utt}
+			mv $file ${file%.*}.WAV
+			sox ${file%.*}.WAV -t wav -r 16000 -b 16 $file
+			rm -f ${file%.*}.WAV
+		done
+	done
+done
+
+local/aishell_data_prep.sh $data/${ctime}/ivector_data/wav $data/${ctime}/ivector_data/transcript
+
+for x in test; do
+  steps/make_mfcc.sh --cmd "$train_cmd" --nj 2 data/$x exp/make_mfcc/$x $mfccdir
+  sid/compute_vad_decision.sh --nj 2 --cmd "$train_cmd" data/$x exp/make_mfcc/$x $mfccdir
+  utils/fix_data_dir.sh data/$x
+done
+
+#split the test to enroll and eval
+mkdir -p data/test/enroll data/test/eval
+cp data/test/{spk2utt,feats.scp,vad.scp} data/test/enroll
+cp data/test/{spk2utt,feats.scp,vad.scp} data/test/eval
+local/split_data_enroll_eval.py data/test/utt2spk  data/test/enroll/utt2spk  data/test/eval/utt2spk
+trials=data/test/aishell_speaker_ver.lst
+local/produce_trials.py data/test/eval/utt2spk $trials
+utils/fix_data_dir.sh data/test/enroll
+utils/fix_data_dir.sh data/test/eval
+
+#extract enroll ivector
+sid/extract_ivectors.sh --cmd "$train_cmd" --nj 2 \
+  exp/extractor_1024 data/test/enroll  exp/ivector_enroll_1024
+#extract eval ivector
+sid/extract_ivectors.sh --cmd "$train_cmd" --nj 2 \
+  exp/extractor_1024 data/test/eval  exp/ivector_eval_1024
+
+#compute plda score
+$train_cmd exp/ivector_eval_1024/log/plda_score.log \
+  ivector-plda-scoring --num-utts=ark:exp/ivector_enroll_1024/num_utts.ark \
+  exp/ivector_train_1024/plda \
+  ark:exp/ivector_enroll_1024/spk_ivector.ark \
+  "ark:ivector-normalize-length scp:exp/ivector_eval_1024/ivector.scp ark:- |" \
+  "cat '$trials' | awk '{print \\\$2, \\\$1}' |" exp/trials_out
+
+#compute eer
+awk '{print $3}' exp/trials_out | paste - $trials | awk '{print $1, $4}' | compute-eer -
+mv exp/trials_out ivector_scores/${ctime}_nospoof.score
+
+rm -rf data mfcc
 
 exit 0
