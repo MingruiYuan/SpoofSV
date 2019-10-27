@@ -14,7 +14,7 @@
 
 firstrun=$1
 
-src_root=/scratch/myuan7/SpoofSV
+src_root=/scratch/myuan7/program/ACTTS/
 ctime=19-09-12_09-08-12
 
 data=${src_root}/test
@@ -28,16 +28,27 @@ set -e # exit on error
 #local/download_and_untar.sh $data $data_url data_aishell
 #local/download_and_untar.sh $data $data_url resource_aishell
 
+if [ ! -d "ivector_scores" ]; then
+  mkdir ivector_scores
+fi
+
+if [ -d "data" ]; then
+  rm -rf data
+fi
+
+if [ -d "mfcc" ]; then
+  rm -rf mfcc
+fi
+
 #Convert test set to pcm format
-if [$firstrun -gt 0]
+if [ $firstrun -gt 0 ]
 then
 	echo "Not the first time to run this script."
 else
 	echo "The first time to run this script."
-	mkdir ivector_scores
 fi  
 
-if [$firstrun -gt 0]
+if [ $firstrun -gt 0 ]
 then
 	for dir in test
 	do
@@ -76,7 +87,7 @@ local/aishell_data_prep.sh $data/${ctime}/ivector_data/wav $data/${ctime}/ivecto
 # want to store MFCC features.
 mfccdir=mfcc
 
-if [$firstrun -gt 0]
+if [ $firstrun -gt 0 ]
 then
 	for x in test; do
 	  steps/make_mfcc.sh --cmd "$train_cmd" --nj 2 data/$x exp/make_mfcc/$x $mfccdir
@@ -91,7 +102,7 @@ else
 	done
 fi
 
-if [$firstrun -eq 0]
+if [ $firstrun -eq 0 ]
 then
 	#train diag ubm
 	sid/train_diag_ubm.sh --nj 2 --cmd "$train_cmd" --num-threads 8 \
@@ -144,7 +155,7 @@ $train_cmd exp/ivector_eval_1024/log/plda_score.log \
 
 #compute eer
 awk '{print $3}' exp/trials_out | paste - $trials | awk '{print $1, $4}' | compute-eer -
-mv exp/trials_out ivector_scores/${ctime}.score
+mv exp/trials_out ivector_scores/${ctime}_mix.score
 
 mv ${data}/${ctime}/ivector_data/wav/test ${data}/${ctime}/ivector_data/test_mix
 mv ${data}/${ctime}/ivector_data/test_nospoof ${data}/${ctime}/ivector_data/wav/test
@@ -204,6 +215,11 @@ $train_cmd exp/ivector_eval_1024/log/plda_score.log \
 awk '{print $3}' exp/trials_out | paste - $trials | awk '{print $1, $4}' | compute-eer -
 mv exp/trials_out ivector_scores/${ctime}_nospoof.score
 
-rm -rf data mfcc
+mv ${data}/${ctime}/ivector_data/wav/test ${data}/${ctime}/ivector_data/test_nospoof
+mv ${data}/${ctime}/ivector_data/test_mix ${data}/${ctime}/ivector_data/wav/test
+mv $data/${ctime}/ivector_data/transcript/VCTK-transcript.txt $data/${ctime}/ivector_data/VCTK-transcript_nospoof.txt
+mv $data/${ctime}/ivector_data/trans_mix.txt $data/${ctime}/ivector_data/transcript/VCTK-transcript.txt
+
+#rm -rf data mfcc
 
 exit 0
