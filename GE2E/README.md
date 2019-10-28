@@ -86,7 +86,7 @@ Make sure the number of test speakers equal to the generated data.
 
 ```yaml
 test:
-    N : 20  # This should be 20 (S1), 48(S2) or 66(S3)
+    N : 20  # This should be 66 (S1), 48 (S2) or 20 (S3).
 ```
 
 Run the following command to perform tests:

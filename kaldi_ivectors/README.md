@@ -4,7 +4,7 @@
 
 Please install kaldi according to [http://kaldi-asr.org/doc/](http://kaldi-asr.org/doc/).  It is recommended that creating a new conda environment for kaldi.
 
-Then go to *egs/aishell* in kaldi.  When you are in the directory *aishell*, please copy **v1**. And use the contents in this directory (conf/, local/, run.sh) to replace the corresponding contents in the v1-copy directory.
+Then go to *egs/aishell* in kaldi.  When you are in the directory *aishell*, please copy **v1**. And use the contents in this directory (conf/, local/, run.sh) to replace the corresponding contents in the v1-copy directory. Also put **ivector_eer.sh** and **ivector_spoofrate** into the v1-copy directory. From now on you stay at **v1-copy** directory.
 
 ### 2.Train and Test I-VECTORS
 

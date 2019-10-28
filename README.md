@@ -133,7 +133,7 @@ cd kaldi_ivectors
 
 ```shell
 cd GE2E
-# Then follow the README in that direcotry.
+# Then follow the README in that directory.
 ```
 
 After running i-vectors and GE2E, you get scores of i-vectors and similarity matrices of GE2E. The following command is used to plot curves of *Spoof Rate (SR)* versus *False Rejection Rate (FRR) in real speech*.
@@ -144,7 +144,10 @@ python -u curve.py --simmat [/path/to/GE2E_simmat] --ivector_score [/path/to/ive
 
 ### 2.4.Spoofing Anti-spoofing Systems
 
-This part is to be updated.
+```shell
+cd anti_spoofing
+# Then follow the README in that directory.
+```
 
 ## Appendix
 
