@@ -49,6 +49,6 @@
 	"LAMBDA": 10,
 
 	"INFERENCE_TEXT2MEL_MODEL": "./checkpoints/conditional/adversarial/19-08-17_13-05-42/text2mel_iteration_538001.tar.pth",
-	"INFERENCE_SSRN_MODEL": "./checkpoints/universal/adversarial/19-08-16_15-21-21/ssrn_iteration_308001.tar.pth",
+	"INFERENCE_SSRN_MODEL": "./checkpoints/conditional/adversarial/19-08-16_15-21-21/ssrn_iteration_308001.tar.pth",
 	"TTS_TEXTS": "./havard.txt"
 }

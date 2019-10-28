@@ -95,3 +95,4 @@ Run the following command to perform tests:
 python -u train_speech_embedder.py
 ```
 
+EER and Spoof Rate (SR) will be printed on the screen.

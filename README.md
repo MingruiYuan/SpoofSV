@@ -1,6 +1,6 @@
 # Spoofing Speaker Verification
 
-This repository is in progress. It reproduces the paper [url].
+This repository replicates the paper [url].
 
 ## Section I Multi-speaker Text-to-speech
 
@@ -84,7 +84,7 @@ Please firstly modify **INFERENCE_TEXT2MEL_MODEL** and **INFERENCE_SSRN_MODEL** 
 
 ```json
 "INFERENCE_TEXT2MEL_MODEL": "./checkpoints/conditional/adversarial/19-08-17_13-05-42/text2mel_iteration_538001.tar.pth",
-"INFERENCE_SSRN_MODEL": "./checkpoints/universal/adversarial/19-08-16_15-21-21/ssrn_iteration_308001.tar.pth"
+"INFERENCE_SSRN_MODEL": "./checkpoints/conditional/adversarial/19-08-16_15-21-21/ssrn_iteration_308001.tar.pth"
 ```
 
 These two models will be used to generate speech. You can use models trained yourself or the pretrained models. Then the following command synthesizes speech from test set. The output audio files are saved at **./samples/${ctime}/**.
@@ -136,3 +136,38 @@ cd GE2E
 # Then follow the README in that direcotry.
 ```
 
+After running i-vectors and GE2E, you get scores of i-vectors and similarity matrices of GE2E. The following command is used to plot curves of *Spoof Rate (SR)* versus *False Rejection Rate (FRR) in real speech*.
+
+```shell
+python -u curve.py --simmat [/path/to/GE2E_simmat] --ivector_score [/path/to/ivector_score]
+```
+
+### 2.4.Spoofing Anti-spoofing Systems
+
+This part is to be updated.
+
+## Appendix
+
+**./main.py**  main script.
+
+**./metagen.py** data preprocessing and meta-data generation.
+
+**./config.json** configuration file.
+
+**./models/**  structures of Text2Mel, SSRN and discriminators.
+
+**./data/** VCTK datasets.
+
+**./spk_emb/** speaker embeddings.
+
+**./train/** traning pipeline.
+
+**./synthesize.py** synthesizing from test sets.
+
+**./generate_test_utterances.py** synthesizing speech for spoofing experiments from Harvard Sentences.
+
+**./curve.py** plot curves.
+
+**./GE2E/** spoofing Google's GE2E.
+
+**./kaldi_ivector/** spoofing i-vectors

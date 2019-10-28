@@ -154,6 +154,7 @@ $train_cmd exp/ivector_eval_1024/log/plda_score.log \
   "cat '$trials' | awk '{print \\\$2, \\\$1}' |" exp/trials_out
 
 #compute eer
+echo "******EER and theshold on mixed speech******"
 awk '{print $3}' exp/trials_out | paste - $trials | awk '{print $1, $4}' | compute-eer -
 mv exp/trials_out ivector_scores/${ctime}_mix.score
 
@@ -212,6 +213,7 @@ $train_cmd exp/ivector_eval_1024/log/plda_score.log \
   "cat '$trials' | awk '{print \\\$2, \\\$1}' |" exp/trials_out
 
 #compute eer
+echo "******EER and threshold on real speech******"
 awk '{print $3}' exp/trials_out | paste - $trials | awk '{print $1, $4}' | compute-eer -
 mv exp/trials_out ivector_scores/${ctime}_nospoof.score
 

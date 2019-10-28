@@ -39,9 +39,6 @@ def plot_attention(att, E, B, N, fig_dir):
 
 def train(model_path):
     device = torch.device(hp.device)
-
-    if not os.path.exists(hp.train.checkpoint_dir):
-        os.system('mkdir -p '+hp.train.checkpoint_dir)
     
     if hp.data.data_preprocessed:
         train_dataset = SpeakerDatasetTIMITPreprocessed(shuffle=True)
@@ -197,7 +194,7 @@ def test(model_path,enroll_num):
                         SPOOF_RATE = spoof_rate
                 batch_avg_EER += EER
                 batch_avg_spoofrate += SPOOF_RATE
-                print("\nEER : %0.4f (thres:%0.4f, FAR:%0.4f, FRR:%0.4f, gtFRR:%0.4f, spoof rate:%0.4f)"%(EER,EER_thresh,EER_FAR,EER_FRR,gt_FRR,SPOOF_RATE))
+                print("\nEER : %0.4f (thres:%0.4f)"%(EER,EER_thresh))
             avg_EER += batch_avg_EER/(batch_id+1)
             avg_spoofrate += batch_avg_spoofrate/(batch_id+1)
         avg_EER = avg_EER / hp.test.epochs
