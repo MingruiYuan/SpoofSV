@@ -1,6 +1,6 @@
 # Spoofing Speaker Verification
 
-This repository replicates the paper [url].
+This repository provides the open source code for the paper **Spoofing Speaker Verification Systems with Multi-speaker Text-to-speech Synthesis** submitted to ICASSP 2020. A preprint of the paper can be found [here](https://arxiv.org/abs/1910.13054).
 
 ## Section I Multi-speaker Text-to-speech
 
@@ -143,6 +143,8 @@ python -u curve.py --simmat [/path/to/GE2E_simmat] --ivector_score [/path/to/ive
 ```
 
 ### 2.4.Spoofing Anti-spoofing Systems
+
+*This part is incomplete now.*
 
 ```shell
 cd anti_spoofing
