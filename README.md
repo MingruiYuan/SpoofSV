@@ -131,6 +131,10 @@ cd kaldi_ivectors
 
 ### 2.3.Spoofing GE2E
 
+Please note that Spoofing GE2E and Spoofing I-Vectors should **NOT** run at the same time. This is because the GE2E data are soft linked from i-vectors data (we aim to save limited disk space). When you run i-vectors, the data may get influenced temporarily and you may get wrong results for GE2E.
+
+ If you would like to copy data rather than soft link when generating data, please modify line 225-226 in generate_test_utterances.py.
+
 ```shell
 cd GE2E
 # Then follow the README in that directory.
